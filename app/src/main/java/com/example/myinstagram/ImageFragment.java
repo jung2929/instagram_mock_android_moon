@@ -3,6 +3,7 @@ package com.example.myinstagram;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -39,11 +40,14 @@ public class ImageFragment extends Fragment {
         ImageView imageView = view.findViewById(R.id.imageView);
         if (getArguments() != null) {
             Bundle args = getArguments();
-            // MainActivity에서 받아온 Resource를 ImageView에 셋팅
             final String imageUrl = args.getString("imgUrl");
+            Glide.with(this).load(imageUrl).into(imageView);
+
+            //Uri uriData = Uri.parse(args.getString("imgUri"));
+            //Glide.with(this).load(uriData).into(imageView);
             //Log.d("유알엘", imageUrl);
             //Picasso.with(getActivity()).load(imageUrl).placeholder(R.drawable.image).into(imageView);
-            Glide.with(this).load(imageUrl).into(imageView);
+            //Glide.with(this).load(imageUrl).into(imageView);
             }
         return view;
     }
@@ -57,9 +61,6 @@ public class ImageFragment extends Fragment {
         return fragment;
     }
 
-
-
-    // TODO: Rename and change types of parameters
     private int mParam1;
 
     public ImageFragment() {}

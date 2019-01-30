@@ -1,6 +1,7 @@
 package com.example.myinstagram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,10 +11,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import me.relex.circleindicator.CircleIndicator;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHolder> {
 
@@ -51,7 +59,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
-        TimeLine item = items.get(position);
+        final TimeLine item = items.get(position);
 
         viewHolder.txtName.setText(item.getPostName());
         viewHolder.txtLocation.setText(item.getLocation());
@@ -59,16 +67,32 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         viewHolder.txtPostName.setText(item.getPostName());
         viewHolder.txtPostComment.setText(item.getPostComment());
         //viewHolder.txtTimeCheck.setText(item.getTimeCheck());
+        viewHolder.txtPostComment2.setText(item.getPostComment2());
+        Glide.with(context).load(item.getProfielUrl()).apply(new RequestOptions().centerCrop().circleCrop()).into(viewHolder.imgPostProfile); //이미지 불러오기
 
-        imageList[position] = item.getImageUrl();
+        //imageList[position] = item.getImageUrl();
 
         BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter(fragmentManager, position);
         viewHolder.vp.setAdapter(bannerPagerAdapter);
         viewHolder.vp.setId(position+1);
 
+        viewHolder.indicator.setViewPager(viewHolder.vp);
+
+        // optional
+        //fragmentAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+
         if (mViewPagerState.containsKey(position)) {
             viewHolder.vp.setCurrentItem(mViewPagerState.get(position));
         }
+
+        viewHolder.imgComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(context,CommentActivity.class);
+                intent.putExtra("comment", item.getCommentList());
+                context.startActivity(intent);
+            }
+        });
 
     }
 
@@ -85,7 +109,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtName, txtLocation, txtLike, txtPostName, txtPostComment, txtTimeCheck;
+        TextView txtName, txtLocation, txtLike, txtPostName, txtPostComment, txtPostComment2, txtTimeCheck;
+        ImageView imgPostProfile, imgComment;
+        CircleIndicator indicator;
+
         public ViewPager vp;
 
         public ViewHolder(View itemView) {
@@ -96,11 +123,16 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             txtLike=itemView.findViewById(R.id.txtLike);
             txtPostName=itemView.findViewById(R.id.txtPostName);
             txtPostComment=itemView.findViewById(R.id.txtPostComment);
+            txtPostComment2=itemView.findViewById(R.id.txtPostComment2);
+            imgPostProfile=itemView.findViewById(R.id.imgPostProfile);
             //txtTimeCheck=itemView.findViewById(R.id.txtTimeCheck);
+            imgComment=itemView.findViewById(R.id.imgComment);
 
             vp = itemView.findViewById(R.id.viewPager);
             FragmentAdapter fragmentAdapter = new FragmentAdapter(fragmentManager);
             vp.setAdapter(fragmentAdapter);
+
+            indicator = (CircleIndicator) itemView.findViewById(R.id.indicator);
         }
     }
 
@@ -115,15 +147,15 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         public Fragment getItem(int position) {
             ImageFragment imageFragment = new ImageFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("imgUrl", imageList[index].get(position));
+            bundle.putString("imgUrl", items.get(index).getImageUrl().get(position));
             imageFragment.setArguments(bundle);
-
             return imageFragment;
         }
 
         @Override
         public int getCount() {
-            return imageCount.get(index);
+            return items.get(index).getImageUrl().size();
+            //return imageCount.get(index);
         }
     }
 

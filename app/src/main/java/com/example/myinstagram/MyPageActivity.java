@@ -19,11 +19,15 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
+
+import static com.example.myinstagram.MainActivity.myProfileUrl;
 
 public class MyPageActivity extends AppCompatActivity {
 
     GridView gridview;
     Context context;
+    ImageView imgHome, imgSearch, imgPost, imgHeart, imgMyProfile;
 
     ArrayList<TimeLine> myFeed = new ArrayList<>(); //서버를통해서 받아와야함 -> feedImageList에 이미지 url전달
 
@@ -41,6 +45,27 @@ public class MyPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_page);
         context=this;
 
+        init();
+
+        String tempProfileUrl = "http://stackhouse.s3.amazonaws.com/b2ae375b60d494290d29b56dd1325135_image.png";
+        TimeLine temp = new TimeLine(tempProfileUrl,"dudwls", "??????", "#스타벅스 #아메리카노", "줄띄위고 입력", new Date(), "15");
+        temp.addImageUrl(tempProfileUrl);
+        myFeed.add(temp);
+        feedImageUrlList.add(temp.getImageUrl().get(0));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case 300:
+                    finish();
+                    break;
+            }
+        }
+    }
+
+    private void init(){
         GridAdapter adapter = new GridAdapter (getApplicationContext(), R.layout.grid_view, feedImageUrlList);
 
         gridview = (GridView)findViewById(R.id.gridview1);
@@ -62,16 +87,35 @@ public class MyPageActivity extends AppCompatActivity {
                 intent.putExtra("comment", clickFeed.getPostComment());
                 intent.putExtra("comment2", clickFeed.getPostComment2());
 
+                startActivityForResult(intent, 300);
+            }
+        });
+
+        imgHome = findViewById(R.id.imgHome);
+        imgSearch = findViewById(R.id.imgSearch);
+        imgPost = findViewById(R.id.imgPost);
+        imgHeart = findViewById(R.id.imgHeart);
+        imgMyProfile = findViewById(R.id.imgMyProfile);
+
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+
+        });
+
+        imgPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(MyPageActivity.this,ImageSelectActivity.class);
                 startActivity(intent);
             }
         });
 
-        String tempProfileUrl = "http://stackhouse.s3.amazonaws.com/b2ae375b60d494290d29b56dd1325135_image.png";
-    TimeLine temp = new TimeLine(tempProfileUrl,"dudwls", "??????", "#스타벅스 #아메리카노", "줄띄위고 입력", "1분전", "15");
-        temp.addImageUrl(tempProfileUrl);
-        myFeed.add(temp);
-        feedImageUrlList.add(temp.getImageUrl().get(0));
-}
+        //String profileUrl = "https://media.treepla.net:447/project/7ac115de-ec05-4ca3-8ea7-f3b70a22a1dc.png";
+        Glide.with(context).load(myProfileUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(imgMyProfile);
+    }
 
 
 
