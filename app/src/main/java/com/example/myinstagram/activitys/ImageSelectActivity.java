@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.activitys;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,16 +11,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myinstagram.R;
+import com.example.myinstagram.TimeLine;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import gun0912.tedbottompicker.TedBottomPicker;
 
-import static com.example.myinstagram.MainActivity.myName;
-import static com.example.myinstagram.MainActivity.myProfileUrl;
-import static com.example.myinstagram.MainActivity.timeLineAdapter;
-import static com.example.myinstagram.MainActivity.timeline;
+import static com.example.myinstagram.activitys.MainActivity.myName;
+import static com.example.myinstagram.activitys.MainActivity.myProfileUrl;
+import static com.example.myinstagram.activitys.MainActivity.timeLineAdapter;
+import static com.example.myinstagram.activitys.MainActivity.timeline;
 
 public class ImageSelectActivity extends AppCompatActivity {
     Context context;

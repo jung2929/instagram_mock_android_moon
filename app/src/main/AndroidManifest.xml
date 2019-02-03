@@ -20,17 +20,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activitys.MainActivity" />
+        <activity android:name=".activitys.MyPageActivity" />
+        <activity android:name=".activitys.FeedActivty" />
+        <activity android:name=".activitys.ImageSelectActivity" />
+        <activity android:name=".activitys.CommentActivity" />
+        <activity android:name=".activitys.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MyPageActivity" />
-        <activity android:name=".FeedActivty" />
-        <activity android:name=".ImageSelectActivity" />
-        <activity android:name=".CommentActivity"></activity>
+        <activity android:name=".activitys.AccountActivity" />
+        <activity android:name=".FollowerActivity"></activity>
     </application>
 
 </manifest>

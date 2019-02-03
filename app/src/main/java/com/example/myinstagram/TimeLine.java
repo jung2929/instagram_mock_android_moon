@@ -29,6 +29,8 @@ public class TimeLine {
         this.postComment2 = postComment2;
         time = "1시간 전";
     }
+
+
     public void addImageUrl(String url){
         imageUrl.add(url);
     }

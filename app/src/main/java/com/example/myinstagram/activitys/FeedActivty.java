@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.activitys;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.example.myinstagram.FeedAdapter;
+import com.example.myinstagram.R;
+import com.example.myinstagram.TimeLine;
 
 import java.util.ArrayList;
 import java.util.Date;

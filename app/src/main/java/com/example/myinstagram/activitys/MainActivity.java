@@ -1,21 +1,30 @@
-package com.example.myinstagram;
+package com.example.myinstagram.activitys;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.baoyz.widget.RefreshDrawable;
+import com.example.myinstagram.Comment;
+import com.example.myinstagram.R;
+import com.example.myinstagram.TimeLine;
+import com.example.myinstagram.TimeLineAdapter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView imgHome, imgSearch, imgPost, imgHeart, imgProfile;
     RecyclerView feedList;
     LinearLayoutManager mLayoutManager;
-    static  TimeLineAdapter timeLineAdapter;
-    PullRefreshLayout layout;
+    static TimeLineAdapter timeLineAdapter;
+    PullRefreshLayout pullRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
         timeLineAdapter = new TimeLineAdapter(getSupportFragmentManager(), timeline, this);
         feedList.setAdapter(timeLineAdapter);
 
-        layout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        pullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         // listen refresh event
-        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //로딩작업수행
-                layout.setRefreshing(false);//로딩 멈추기
+                pullRefreshLayout.setRefreshing(false);//로딩 멈추기
             }
 
         });
@@ -110,5 +119,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }

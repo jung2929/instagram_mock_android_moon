@@ -1,10 +1,9 @@
-package com.example.myinstagram;
+package com.example.myinstagram.activitys;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,22 +11,26 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myinstagram.FollowerActivity;
+import com.example.myinstagram.R;
+import com.example.myinstagram.TimeLine;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.myinstagram.MainActivity.myProfileUrl;
+import static com.example.myinstagram.activitys.MainActivity.myProfileUrl;
 
 public class MyPageActivity extends AppCompatActivity {
 
     GridView gridview;
     Context context;
     ImageView imgHome, imgSearch, imgPost, imgHeart, imgMyProfile;
+    TextView txtPostNum, txtFollower, txtFolloing;
 
     ArrayList<TimeLine> myFeed = new ArrayList<>(); //서버를통해서 받아와야함 -> feedImageList에 이미지 url전달
 
@@ -75,7 +78,7 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //클릭 이벤트 설정 -> 각 피드 상세보기
-                Toast.makeText(MyPageActivity.this,"클릭한 포지션: " + position +"총 크기: " + feedImageUrlList.size() , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyPageActivity.this,"클릭한 포지션: " + position +"총 크기: " + feedImageUrlList.size() , Toast.LENGTH_SHORT).show();
                 //게시글 상세보기 액티비티 띄우기
                 TimeLine clickFeed = myFeed.get(position);
                 Intent intent= new Intent(MyPageActivity.this,FeedActivty.class);
@@ -96,6 +99,10 @@ public class MyPageActivity extends AppCompatActivity {
         imgPost = findViewById(R.id.imgPost);
         imgHeart = findViewById(R.id.imgHeart);
         imgMyProfile = findViewById(R.id.imgMyProfile);
+        txtPostNum = findViewById(R.id.txtPostNum);
+        txtFollower=findViewById(R.id.txtFollower);
+        txtFolloing =findViewById(R.id.txtFolloing);
+
 
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +120,20 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
 
+        txtFollower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(MyPageActivity.this,FollowerActivity.class);
+                startActivity(intent);
+            }
+        });
+        txtFolloing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(MyPageActivity.this,FollowerActivity.class);
+                startActivity(intent);
+            }
+        });
         //String profileUrl = "https://media.treepla.net:447/project/7ac115de-ec05-4ca3-8ea7-f3b70a22a1dc.png";
         Glide.with(context).load(myProfileUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(imgMyProfile);
     }

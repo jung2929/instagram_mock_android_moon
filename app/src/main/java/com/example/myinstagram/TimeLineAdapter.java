@@ -13,10 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myinstagram.activitys.CommentActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         final TimeLine item = items.get(position);
 
         viewHolder.txtName.setText(item.getPostName());
@@ -90,6 +90,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent= new Intent(context,CommentActivity.class);
                 intent.putExtra("comment", item.getCommentList());
+                intent.putExtra("index", position);
                 context.startActivity(intent);
             }
         });
