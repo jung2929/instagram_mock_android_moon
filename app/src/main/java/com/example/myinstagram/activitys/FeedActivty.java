@@ -71,5 +71,11 @@ public class FeedActivty extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               finish();
+            }
+        });
     }
 }

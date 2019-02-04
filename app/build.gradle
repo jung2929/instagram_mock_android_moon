@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.1'
 
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    implementation 'com.pm10:indicator:1.0.2'
 
     //Optional: see how to use the utility.
     //implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'

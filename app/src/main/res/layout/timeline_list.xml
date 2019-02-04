@@ -64,29 +64,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="-7dp"
-        android:layout_weight="9">
-        <me.relex.circleindicator.CircleIndicator
-            android:id="@+id/indicator"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            app:ci_gravity = "bottom"/>
-    </android.support.v4.view.ViewPager>
+        android:layout_weight="9"></android.support.v4.view.ViewPager>
 
-
-
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="9.5">
 
         <ImageView
             android:id="@+id/imgHeart"
-            android:layout_width="0dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
@@ -94,27 +85,35 @@
 
         <ImageView
             android:id="@+id/imgComment"
-            android:layout_width="0dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
             android:layout_weight="1"
             android:padding="5dp"
             app:srcCompat="@drawable/comment" />
 
         <ImageView
             android:id="@+id/imgDirect"
-            android:layout_width="0dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
             android:layout_weight="1"
             android:padding="5dp"
             app:srcCompat="@drawable/direction" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="0dp"
+        <com.pm10.library.CircleIndicator
+            android:id="@+id/circle_indicator"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="5.5"
-            android:text="TextView" />
-    </LinearLayout>
+            android:layout_gravity="center_vertical|center_horizontal"
+            app:p_defaultColor="@color/white"
+            app:p_gap="4dp"
+            app:p_radius="4dp"
+            app:p_selectedColor="@android:color/holo_blue_dark"
+            app:p_strokeColor="@android:color/holo_blue_dark"
+            app:p_strokeWidth="1dp" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -133,7 +132,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:text="좋아요  "
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtLike"
@@ -141,7 +141,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="10개"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -170,17 +171,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:weightSum="9.5">
 
             <TextView
                 android:id="@+id/txtPostComment2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
-                android:text="여기에 글을 더 표시할수있다 \n 엔터도 가능 (3줄까지?)"
+                android:text="여기에 글을 더 표시할수있다 \n 엔터도 가능 (3줄까지?)\ㅜ\n ㅇㅇㅇㅇ"
                 android:textColor="@android:color/black" />
         </LinearLayout>
     </LinearLayout>

@@ -1,25 +1,26 @@
-package com.example.myinstagram;
+package com.example.myinstagram.activitys;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.example.myinstagram.FollowerPagerAdapter;
+import com.example.myinstagram.HttpConnection;
+import com.example.myinstagram.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,12 +36,11 @@ public class FollowerActivity extends AppCompatActivity {
     private FollowerPagerAdapter followerPagerAdapter;
 
     private HttpConnection httpConnection;
-    ArrayList<Follower> followerList;
-    ArrayList<Follower> followingList;
-
 
     int followerCount=1;
     int followingCount=1;
+
+    ImageView imgHome, imgSearch, imgPost, imgHeart, imgMyProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,32 @@ public class FollowerActivity extends AppCompatActivity {
 
             }
         });
+
+        imgHome = findViewById(R.id.imgHome);
+        imgSearch = findViewById(R.id.imgSearch);
+        imgPost = findViewById(R.id.imgPost);
+        imgHeart = findViewById(R.id.imgHeart);
+        imgMyProfile = findViewById(R.id.imgMyProfile);
+
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                //resultIntent.putExtra("result","연산 결과는 "+result+" 입니다.");
+                setResult(RESULT_OK,resultIntent);
+                finish();
+            }
+
+        });
+
+        imgPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(FollowerActivity.this,ImageSelectActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
     private View createTabView(String tab, String count) {
         View tabView = LayoutInflater.from(context).inflate(R.layout.custom_follower_tab, null);
@@ -108,6 +134,7 @@ public class FollowerActivity extends AppCompatActivity {
                             result = result.substring(index);
                             JSONObject jsonObject= new JSONObject(result);
                             resultcode=jsonObject.getInt("code");
+                            Log.d("팔로워목록", result);
                             if(resultcode==100){
                                 JSONArray followerArray = (JSONArray)jsonObject.get("result");
                                 for(int i=0;i<followerArray.length();i++){

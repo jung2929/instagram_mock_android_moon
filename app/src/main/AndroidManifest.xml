@@ -33,7 +33,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activitys.AccountActivity" />
-        <activity android:name=".FollowerActivity"></activity>
+        <activity android:name=".activitys.FollowerActivity" />
+        <activity android:name=".ProfileEditActivity"></activity>
     </application>
 
 </manifest>

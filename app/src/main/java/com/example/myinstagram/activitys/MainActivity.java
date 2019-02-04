@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateFeed(){
         //서버를통해 업데이트
-            //timeLineAdapter.notifyDataSetChanged();
+        timeLineAdapter.notifyDataSetChanged();
     }
 
     private void init(){

@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.myinstagram.FollowerActivity;
+import com.example.myinstagram.ProfileEditActivity;
 import com.example.myinstagram.R;
 import com.example.myinstagram.TimeLine;
 
@@ -30,7 +30,7 @@ public class MyPageActivity extends AppCompatActivity {
     GridView gridview;
     Context context;
     ImageView imgHome, imgSearch, imgPost, imgHeart, imgMyProfile;
-    TextView txtPostNum, txtFollower, txtFolloing;
+    TextView txtPostNum, txtFollower, txtFolloing, txtEditProfile;
 
     ArrayList<TimeLine> myFeed = new ArrayList<>(); //서버를통해서 받아와야함 -> feedImageList에 이미지 url전달
 
@@ -50,11 +50,13 @@ public class MyPageActivity extends AppCompatActivity {
 
         init();
 
+        ////테스트용 데이터/////
         String tempProfileUrl = "http://stackhouse.s3.amazonaws.com/b2ae375b60d494290d29b56dd1325135_image.png";
         TimeLine temp = new TimeLine(tempProfileUrl,"dudwls", "??????", "#스타벅스 #아메리카노", "줄띄위고 입력", new Date(), "15");
         temp.addImageUrl(tempProfileUrl);
         myFeed.add(temp);
         feedImageUrlList.add(temp.getImageUrl().get(0));
+        ////////////////////////
     }
 
     @Override
@@ -62,6 +64,9 @@ public class MyPageActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK){
             switch (requestCode){
                 case 300:
+                    finish();
+                    break;
+                case 200:
                     finish();
                     break;
             }
@@ -102,6 +107,7 @@ public class MyPageActivity extends AppCompatActivity {
         txtPostNum = findViewById(R.id.txtPostNum);
         txtFollower=findViewById(R.id.txtFollower);
         txtFolloing =findViewById(R.id.txtFolloing);
+        txtEditProfile=findViewById(R.id.txtEditProfile);
 
 
         imgHome.setOnClickListener(new View.OnClickListener() {
@@ -124,13 +130,20 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(MyPageActivity.this,FollowerActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 200);
             }
         });
         txtFolloing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(MyPageActivity.this,FollowerActivity.class);
+                startActivityForResult(intent, 200);
+            }
+        });
+        txtEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(MyPageActivity.this,ProfileEditActivity.class);
                 startActivity(intent);
             }
         });
