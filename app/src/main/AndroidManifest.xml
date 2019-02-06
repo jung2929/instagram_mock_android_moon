@@ -34,7 +34,8 @@
         </activity>
         <activity android:name=".activitys.AccountActivity" />
         <activity android:name=".activitys.FollowerActivity" />
-        <activity android:name=".ProfileEditActivity"></activity>
+        <activity android:name=".activitys.ProfileEditActivity" />
+        <activity android:name=".activitys.YourPageActivity"></activity>
     </application>
 
 </manifest>

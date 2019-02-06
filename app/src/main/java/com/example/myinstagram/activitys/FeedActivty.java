@@ -1,6 +1,7 @@
 package com.example.myinstagram.activitys;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,9 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.myinstagram.FeedAdapter;
+import com.example.myinstagram.adapters.FeedAdapter;
 import com.example.myinstagram.R;
-import com.example.myinstagram.TimeLine;
+import com.example.myinstagram.data.TimeLine;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,9 @@ public class FeedActivty extends AppCompatActivity {
 
     ArrayList<TimeLine> feed = new ArrayList<>();
     ImageView imgHome, imgSearch, imgPost, imgHeart, imgProfile;
+
+    SharedPreferences pref;
+    String myProfileImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +46,7 @@ public class FeedActivty extends AppCompatActivity {
             timeLine.addImageUrl(imageUrlList.get(i));
         }
         feed.add(timeLine);
-        RecyclerView rv = (RecyclerView) findViewById(R.id.feed);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        rv.setLayoutManager(mLayoutManager);
-        FeedAdapter feedAdapter = new FeedAdapter(getSupportFragmentManager(), feed, this);
-        rv.setAdapter(feedAdapter);
+
     }
     private void init(){
         imgHome = findViewById(R.id.imgHome);
@@ -77,5 +77,15 @@ public class FeedActivty extends AppCompatActivity {
                finish();
             }
         });
+
+        pref = getSharedPreferences("pref", MODE_PRIVATE);
+        myProfileImageUrl = pref.getString("myProfileImageUrl", "");
+
+        RecyclerView rv = (RecyclerView) findViewById(R.id.feed);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        rv.setLayoutManager(mLayoutManager);
+        FeedAdapter feedAdapter = new FeedAdapter(getSupportFragmentManager(), feed, this, myProfileImageUrl);
+        rv.setAdapter(feedAdapter);
+
     }
 }

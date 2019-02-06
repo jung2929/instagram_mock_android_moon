@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,9 +19,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myinstagram.data.Comment;
+import com.example.myinstagram.ImageFragment;
+import com.example.myinstagram.R;
+import com.example.myinstagram.data.TimeLine;
 import com.example.myinstagram.activitys.CommentActivity;
+import com.example.myinstagram.activitys.YourPageActivity;
 import com.pm10.library.CircleIndicator;
-import com.pm10.library.LineIndicator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,7 +69,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         final TimeLine item = items.get(position);
 
         viewHolder.txtName.setText(item.getPostName());
-        viewHolder.txtLocation.setText(item.getLocation());
+//        viewHolder.txtLocation.setText(item.getLocation());
         viewHolder.txtLike.setText(item.getLike()+"개");
         viewHolder.txtPostName.setText(item.getPostName());
         viewHolder.txtPostComment.setText(item.getPostComment());
@@ -136,6 +140,15 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             }
         });
 
+        viewHolder.imgPostProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(context,YourPageActivity.class);
+                //intent.putExtra("comment", item.getCommentList());
+                //intent.putExtra("index", position);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -160,7 +173,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             super(itemView);
 
             txtName=itemView.findViewById(R.id.txtName);
-            txtLocation=itemView.findViewById(R.id.txtLocation);
+            //txtLocation=itemView.findViewById(R.id.txtLocation);
             txtLike=itemView.findViewById(R.id.txtLike);
             txtPostName=itemView.findViewById(R.id.txtPostName);
             txtPostComment=itemView.findViewById(R.id.txtPostComment);

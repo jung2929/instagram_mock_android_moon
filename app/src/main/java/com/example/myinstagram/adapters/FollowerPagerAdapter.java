@@ -1,11 +1,13 @@
-package com.example.myinstagram;
+package com.example.myinstagram.adapters;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
- public class FollowerPagerAdapter extends FragmentStatePagerAdapter {
+import com.example.myinstagram.FollowerFragment;
+
+public class FollowerPagerAdapter extends FragmentStatePagerAdapter {
 
      final int FOLLOWER_MODE=1;
      final int FOLLOING_MODE=2;

@@ -2,7 +2,6 @@ package com.example.myinstagram.activitys;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +10,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.myinstagram.Comment;
-import com.example.myinstagram.CommentAdapter;
+import com.example.myinstagram.data.Comment;
+import com.example.myinstagram.adapters.CommentAdapter;
 import com.example.myinstagram.R;
 
 import java.util.ArrayList;

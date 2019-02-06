@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.data;
 
 import java.io.Serializable;
 import java.util.Date;

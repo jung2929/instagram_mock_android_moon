@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myinstagram.data.Comment;
+import com.example.myinstagram.ImageFragment;
+import com.example.myinstagram.R;
+import com.example.myinstagram.data.TimeLine;
 import com.example.myinstagram.activitys.CommentActivity;
 import com.pm10.library.CircleIndicator;
 
@@ -37,12 +40,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
     ArrayList<String> imageList = new ArrayList<>();
 
+    String myProfileImageUrl;
 
-
-    public FeedAdapter(FragmentManager fragmentManager, ArrayList<TimeLine> items, Context context) {
+    public FeedAdapter(FragmentManager fragmentManager, ArrayList<TimeLine> items, Context context, String myProfileImageUrl) {
         this.items = items;
         this.fragmentManager = fragmentManager;
         this.context=context;
+        this.myProfileImageUrl = myProfileImageUrl;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         final TimeLine item = items.get(position);
 
         viewHolder.txtName.setText(item.getPostName());
-        viewHolder.txtLocation.setText(item.getLocation());
+        //viewHolder.txtLocation.setText(item.getLocation());
         viewHolder.txtLike.setText(item.getLike());
         viewHolder.txtPostName.setText(item.getPostName());
         viewHolder.txtPostComment.setText(item.getPostComment());
@@ -77,7 +81,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             viewHolder.txtPostComment2.setText(item.getPostComment2());
         }
         //viewHolder.txtTimeCheck.setText(item.getTimeCheck());
-        Glide.with(context).load(item.getProfielUrl()).apply(new RequestOptions().centerCrop().circleCrop()).into(viewHolder.imgPostProfile); //이미지 불러오기
+
+        Glide.with(context).load(myProfileImageUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(viewHolder.imgPostProfile); //본인 프로필 이미지 불러오기
 
         imageList = item.getImageUrl();
 
@@ -152,7 +157,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             super(itemView);
 
             txtName=itemView.findViewById(R.id.txtName);
-            txtLocation=itemView.findViewById(R.id.txtLocation);
+            //txtLocation=itemView.findViewById(R.id.txtLocation);
             txtLike=itemView.findViewById(R.id.txtLike);
             txtPostName=itemView.findViewById(R.id.txtPostName);
             txtPostComment=itemView.findViewById(R.id.txtPostComment);

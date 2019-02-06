@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.data;
 
 import android.net.Uri;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class TimeLine {
-    String profielUrl, postName, location, postComment,postComment2, timeCheck, like, time;
+    String profielUrl, postName, location, postComment,postComment2, timeCheck, like;
     ArrayList<String> imageUrl;
     ArrayList<Uri> imageUri;
     ArrayList<Comment> commentList;
@@ -17,7 +17,6 @@ public class TimeLine {
         this.postName = postName;
         this.location = location;
         this.postComment = postComment;
-        this.timeCheck = timeCheck;
         this.like = like;
         imageUrl=new ArrayList<>();
         commentList=new ArrayList<>();
@@ -27,7 +26,9 @@ public class TimeLine {
         //int index = postComment.indexOf("\n");
         //postComment2 = postComment.substring(index+1);
         this.postComment2 = postComment2;
-        time = "1시간 전";
+
+        /////서버에서 받아온 작성시간 계싼
+        timeCheck = "1시간 전";
     }
 
 
@@ -55,8 +56,8 @@ public class TimeLine {
         return postComment;
     }
 
-    public String getTime() {
-        return time;
+    public String getTimeCheck() {
+        return timeCheck;
     }
 
     public String getLike() {

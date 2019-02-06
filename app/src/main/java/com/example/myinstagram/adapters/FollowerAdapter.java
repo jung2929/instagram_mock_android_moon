@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.adapters;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -11,9 +11,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myinstagram.data.Follower;
+import com.example.myinstagram.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHolder> {
 
@@ -22,8 +23,6 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
     public static FragmentManager fragmentManager;
 
     public static Context context;
-
-    HashMap<Integer, Integer> mViewPagerState = new HashMap<>();
 
 
     public FollowerAdapter(ArrayList<Follower> items, Context context) {

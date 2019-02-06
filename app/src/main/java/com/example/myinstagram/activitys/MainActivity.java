@@ -10,10 +10,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.example.myinstagram.Comment;
+import com.example.myinstagram.HttpConnection;
+import com.example.myinstagram.data.Comment;
 import com.example.myinstagram.R;
-import com.example.myinstagram.TimeLine;
-import com.example.myinstagram.TimeLineAdapter;
+import com.example.myinstagram.data.TimeLine;
+import com.example.myinstagram.adapters.TimeLineAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +31,12 @@ public class MainActivity extends AppCompatActivity {
 
     static ArrayList<TimeLine> timeline = new ArrayList<>();
     static String myProfileUrl = "https://media.treepla.net:447/project/7ac115de-ec05-4ca3-8ea7-f3b70a22a1dc.png";
-    static String myName = "youngjinmoon";
+    static String myName;
+    static String myId;
+    static String myIntro;
+
+    private HttpConnection httpConnection;
+
 
     ImageView imgHome, imgSearch, imgPost, imgHeart, imgProfile;
     RecyclerView feedList;
@@ -65,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         timeline.add(temp2);
 
         init();
-
+        userInfoLoad();
 
     }
 
@@ -77,10 +83,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateFeed(){
         //서버를통해 업데이트
+        //서버에서 10개정도만 불러와서 리스트에 이어붙임
+
         timeLineAdapter.notifyDataSetChanged();
     }
 
     private void init(){
+        httpConnection = new HttpConnection();
+
         imgHome = findViewById(R.id.imgHome);
         imgSearch = findViewById(R.id.imgSearch);
         imgPost = findViewById(R.id.imgPost);
@@ -99,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 //로딩작업수행
+                //저장된 피드 모두지우고 다시 서버에 재요청
                 pullRefreshLayout.setRefreshing(false);//로딩 멈추기
             }
 
@@ -108,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(MainActivity.this,MyPageActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 150);
             }
         });
         imgPost.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +131,60 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case 150:
+                    Intent intent= new Intent(MainActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();  //로그아웃했을때
+                    break;
+            }
+        }
+    }
 
+    private void userInfoLoad() {
+        new Thread() {
+            public void run() {
+                httpConnection.userInfo("dudwls0113", new Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result;
+                        int resultcode=0;
+                        String data="";
+
+                        result=response.body().string();
+                        Log.d("유저정보조회", result);
+                        //int index = result.indexOf("{");
+                        //result = result.substring(index);
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(result);
+                            Log.d("유저정보조회시도", json.toString());
+                            resultcode = json.getInt("code");
+
+                            data = json.getJSONArray("data").toString();
+                            Log.d("유저정보data", data);
+
+                            if (resultcode == 100) {
+                                Log.d("유저정보조회 성공 ", data);
+                                myId=(json.getJSONArray("data").getJSONObject(0).getString("user_id"));
+                                myName=(json.getJSONArray("data").getJSONObject(0).getString("name"));
+                                myIntro=(json.getJSONArray("data").getJSONObject(0).getString("introduction"));
+                                //myProfileUrl=(json.getJSONArray("data").getJSONObject(0).getString("profileImage")); 아직 프로필 수정이 안되서 일단안함
+                            }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }.start();
+    }
 
 }

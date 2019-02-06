@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
