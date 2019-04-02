@@ -112,7 +112,6 @@ public class ImageSelectActivity extends AppCompatActivity {
                 ///////////////////////////////////////////////////////////////////
 
 
-                finish();
             }
         });
     }
@@ -145,13 +144,13 @@ public class ImageSelectActivity extends AppCompatActivity {
                         }
                         if(resultcode==100){
                             Log.d("게시글업로드 성공 ", data);
-
+                            finish();
                             ///////게시글까지 다완료되면 테스트용
-                            TimeLine newTimeLine = new TimeLine(myProfileUrl,myName, "", comment1, comment2, new Date(), "0"); // 로컬테스트용
-                            newTimeLine.addImageUrl(imageUrl);// 로컬테스트용
-                            newTimeLine.addImageUrl("https://ppss.kr/wp-content/uploads/2016/11/album-540x540.jpg");// 로컬테스트용
-                            timeline.add(newTimeLine);// 로컬테스트용
-                            timeLineAdapter.notifyDataSetChanged();// 로컬테스트용
+                            //TimeLine newTimeLine = new TimeLine(myProfileUrl,myName, "", comment1, comment2, new Date(), "0"); // 로컬테스트용
+                            //newTimeLine.addImageUrl(imageUrl);// 로컬테스트용
+                            //newTimeLine.addImageUrl("https://ppss.kr/wp-content/uploads/2016/11/album-540x540.jpg");// 로컬테스트용
+                            //timeline.add(newTimeLine);// 로컬테스트용
+                            //timeLineAdapter.notifyDataSetChanged();// 로컬테스트용
                         }
                     }
                 });
@@ -174,6 +173,7 @@ public class ImageSelectActivity extends AppCompatActivity {
                         String url="";
 
                         result=response.body().string();
+                        Log.d("이미지업로드실패 1" , result);
                         int index = result.indexOf("{");
                        // result = result.substring(index);
                        // JSONObject json = null;
@@ -187,9 +187,7 @@ public class ImageSelectActivity extends AppCompatActivity {
                         }
                         if(resultcode==100){
                             Log.d("이미지업로드성공 ", url);
-                            //editor.putString("myProfileImageUrl", url);
-                            //editor.commit();
-                            imageUrl=url;
+                            imageUrl=url; //이 액티비티용
 
                             postUpload(); //이미지 업로드 성공하면 글 업로드
                         }

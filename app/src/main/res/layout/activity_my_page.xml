@@ -101,7 +101,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5.5"
                     android:orientation="vertical"
-                    android:weightSum="2">
+                    android:weightSum="1.9">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -157,7 +157,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.4"
                         android:orientation="horizontal"
                         android:weightSum="3">
 
@@ -167,9 +167,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="게시글"
+                            android:textAlignment="center"
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="13sp"
-                            android:textAlignment="center" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/textView8"
@@ -195,7 +195,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.25"
+                        android:layout_weight="0.1"
+                        android:background="@android:color/transparent"
                         android:orientation="horizontal"></LinearLayout>
 
                     <TextView
@@ -222,7 +223,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="6dp"
                     android:text="문영진"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
@@ -230,14 +231,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/txtIntro"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
                     android:text="TextView"
@@ -255,7 +257,7 @@
                 android:id="@+id/gridview1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="8.5"
+                android:layout_weight="9.5"
                 android:gravity="center"
                 android:horizontalSpacing="0.5dp"
                 android:numColumns="3"
@@ -305,7 +307,7 @@
         app:srcCompat="@drawable/heart" />
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/imgProfile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

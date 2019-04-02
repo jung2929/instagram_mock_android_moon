@@ -12,10 +12,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.myinstagram.adapters.FollowerPagerAdapter;
 import com.example.myinstagram.HttpConnection;
 import com.example.myinstagram.R;
 
+import static com.example.myinstagram.activitys.MainActivity.myId;
+import static com.example.myinstagram.activitys.MainActivity.myProfileUrl;
 import static com.example.myinstagram.activitys.MyPageActivity.followerCount;
 import static com.example.myinstagram.activitys.MyPageActivity.followingCount;
 
@@ -76,7 +80,7 @@ public class FollowerActivity extends AppCompatActivity {
         imgProfile = findViewById(R.id.imgProfile);
         txtUserId = findViewById(R.id.txtUserId);
 
-        txtUserId.setText("아이디로설정");
+        txtUserId.setText(myId);
 
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +100,7 @@ public class FollowerActivity extends AppCompatActivity {
             }
         });
 
+        Glide.with(this).load(myProfileUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(imgProfile);
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

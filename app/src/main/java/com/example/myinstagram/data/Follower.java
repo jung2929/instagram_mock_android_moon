@@ -6,12 +6,12 @@ import java.util.Date;
 public class Follower implements Serializable {
     String profileUrl;
     String name;
-    Boolean isYouFollowMe;
+    Boolean amIFollowYou;
 
-    public Follower(String profileUrl, String name, Boolean isYouFollowMe) {
+    public Follower(String profileUrl, String name, Boolean amIFollowYou) {
         this.profileUrl = profileUrl;
         this.name = name;
-        this.isYouFollowMe = isYouFollowMe;
+        this.amIFollowYou = amIFollowYou;
     }
 
     public String getProfileUrl() {
@@ -23,10 +23,10 @@ public class Follower implements Serializable {
     }
 
     public Boolean getYouFollowMe() {
-        return isYouFollowMe;
+        return amIFollowYou;
     }
 
     public void setYouFollowMe(Boolean youFollowMe) {
-        isYouFollowMe = youFollowMe;
+        amIFollowYou = youFollowMe;
     }
 }

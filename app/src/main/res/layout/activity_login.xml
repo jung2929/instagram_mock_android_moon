@@ -18,8 +18,9 @@
             android:id="@+id/imageView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:padding="45dp"
-            app:srcCompat="@drawable/instagram" />
+            app:srcCompat="@drawable/unstagram" />
     </FrameLayout>
 
     <EditText
@@ -30,11 +31,14 @@
         android:layout_marginRight="15dp"
         android:layout_weight="1"
         android:background="@drawable/teduri"
+        android:ellipsize="end"
         android:ems="10"
-        android:hint="사용자 이름, 이메일"
-        android:inputType="textPersonName"
+        android:hint="e-mail"
+        android:inputType="textEmailAddress"
         android:paddingLeft="10dp"
-        android:textColor="@android:color/black" />
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray" />
 
     <EditText
         android:id="@+id/editPassword"
@@ -45,11 +49,14 @@
         android:layout_marginRight="15dp"
         android:layout_weight="1"
         android:background="@drawable/teduri"
+        android:ellipsize="end"
         android:ems="10"
-        android:hint="비밀반호"
+        android:hint="password"
         android:inputType="textPassword"
         android:paddingLeft="10dp"
-        android:textColor="@android:color/black" />
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/textView3"
@@ -60,13 +67,11 @@
     <TextView
         android:id="@+id/txtLogin"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_weight="1"
-        android:background="@android:color/holo_blue_light"
+        android:background="@drawable/btn"
         android:gravity="center"
-        android:text="로그인"
         android:textAlignment="center" />
 
     <TextView
@@ -87,7 +92,7 @@
             android:id="@+id/textView13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="100dp"
             android:text="계정이 없으신가요?  "
             android:textColor="@android:color/darker_gray" />
@@ -96,9 +101,9 @@
             android:id="@+id/txtAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center"
+            android:layout_gravity="center_vertical"
             android:text="가입하기"
-            android:textColor="@android:color/holo_blue_dark" />
+            android:textColor="#8432ea" />
     </LinearLayout>
 
 </LinearLayout>

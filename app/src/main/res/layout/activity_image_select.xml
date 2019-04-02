@@ -87,20 +87,24 @@
             android:layout_marginLeft="15dp"
             android:layout_weight="2.5"
             android:padding="5dp"
-            app:srcCompat="@drawable/image" />
+            app:srcCompat="@drawable/default_image" />
 
         <EditText
             android:id="@+id/editComment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
             android:layout_weight="6.5"
+            android:background="@drawable/teduri"
             android:gravity="top|left"
+            android:hint="사진의 내용 입력"
+            android:inputType="text|textMultiLine"
             android:paddingLeft="10dp"
             android:paddingTop="15dp"
             android:paddingRight="10dp"
             android:paddingBottom="15dp"
-            android:text="여기에 내용을 입력합니다 "
             android:textColor="@android:color/background_dark"
+            android:textColorHint="@android:color/darker_gray"
             android:textSize="14sp" />
 
     </LinearLayout>

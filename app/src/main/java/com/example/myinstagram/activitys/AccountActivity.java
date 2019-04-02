@@ -27,6 +27,9 @@ public class AccountActivity extends AppCompatActivity {
     TextView txtAccount;
     String id, password, passwordCheck, name, email, intro;
 
+    int normalBackground = R.drawable.teduri;
+    int selectedBackground = R.drawable.teduri_select;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +54,94 @@ public class AccountActivity extends AppCompatActivity {
                 }
             }
         });
+
+        editId.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    editId.setBackgroundResource(selectedBackground);
+
+                    editPassword.setBackgroundResource(normalBackground);
+                    editPasswordCheck.setBackgroundResource(normalBackground);
+                    editName.setBackgroundResource(normalBackground);
+                    editEmalil.setBackgroundResource(normalBackground);
+                    editIntro.setBackgroundResource(normalBackground);
+                }
+            }
+        });
+
+        editPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    editPassword.setBackgroundResource(selectedBackground);
+
+                    editId.setBackgroundResource(normalBackground);
+                    editPasswordCheck.setBackgroundResource(normalBackground);
+                    editName.setBackgroundResource(normalBackground);
+                    editEmalil.setBackgroundResource(normalBackground);
+                    editIntro.setBackgroundResource(normalBackground);
+                }
+            }
+        });
+        editPasswordCheck.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    editPasswordCheck.setBackgroundResource(selectedBackground);
+
+                    editPassword.setBackgroundResource(normalBackground);
+                    editId.setBackgroundResource(normalBackground);
+                    editName.setBackgroundResource(normalBackground);
+                    editEmalil.setBackgroundResource(normalBackground);
+                    editIntro.setBackgroundResource(normalBackground);
+                }
+            }
+        });
+        editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    editName.setBackgroundResource(selectedBackground);
+
+                    editPassword.setBackgroundResource(normalBackground);
+                    editPasswordCheck.setBackgroundResource(normalBackground);
+                    editId.setBackgroundResource(normalBackground);
+                    editEmalil.setBackgroundResource(normalBackground);
+                    editIntro.setBackgroundResource(normalBackground);
+                }
+            }
+        });
+        editEmalil.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    editEmalil.setBackgroundResource(selectedBackground);
+
+                    editPassword.setBackgroundResource(normalBackground);
+                    editPasswordCheck.setBackgroundResource(normalBackground);
+                    editName.setBackgroundResource(normalBackground);
+                    editId.setBackgroundResource(normalBackground);
+                    editIntro.setBackgroundResource(normalBackground);
+                }
+            }
+        });
+        editIntro.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    editIntro.setBackgroundResource(selectedBackground);
+
+                    editPassword.setBackgroundResource(normalBackground);
+                    editPasswordCheck.setBackgroundResource(normalBackground);
+                    editName.setBackgroundResource(normalBackground);
+                    editEmalil.setBackgroundResource(normalBackground);
+                    editId.setBackgroundResource(normalBackground);
+                }
+            }
+        });
     }
+
 
     private void sendData() {
         // 네트워크 통신하는 작업은 무조건 작업스레드를 생성해서 호출 해줄 것!!

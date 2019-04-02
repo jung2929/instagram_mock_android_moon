@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">MyInstagram</string>
+    <string name="app_name">Unstagram</string>
+    <string name="default_notification_channel_name">pushhhhh</string>
 </resources>

@@ -36,4 +36,8 @@ public class Comment implements Serializable {
     public String getName() {
         return name;
     }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
 }

@@ -39,9 +39,13 @@ dependencies {
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.pm10:indicator:1.0.2'
 
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
+
     //Optional: see how to use the utility.
     //implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
 
     //Optional: see how to use the utility.
     //implementation 'com.ogaclejapan.smarttablayout:utils-v13:1.6.1@aar'
 }
+apply plugin: 'com.google.gms.google-services'

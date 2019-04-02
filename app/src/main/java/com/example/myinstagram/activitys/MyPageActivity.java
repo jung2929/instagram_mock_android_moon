@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -39,17 +42,17 @@ import okhttp3.Response;
 import static com.example.myinstagram.activitys.MainActivity.myId;
 import static com.example.myinstagram.activitys.MainActivity.myIntro;
 import static com.example.myinstagram.activitys.MainActivity.myName;
+import static com.example.myinstagram.activitys.MainActivity.myProfileUrl;
 
 public class MyPageActivity extends AppCompatActivity {
 
     GridView gridview;
     GridAdapter adapter;
     Context context;
-    ImageView imgHome, imgSearch, imgPost, imgHeart, imgMyProfile;
+    ImageView imgHome, imgSearch, imgPost, imgHeart, imgMyProfile, imgProfile;
     TextView txtPostNum, txtFollower, txtFolloing, txtEditProfile, txtId, txtName, txtIntro;
 
     private String jwt;
-    private String myProfileImageUrl;
 
     private HttpConnection httpConnection;
     //서버에서 본인정보, 팔로워, 팔로잉, 게시글수 등 가져와서 화면 초기화해줌
@@ -82,6 +85,7 @@ public class MyPageActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         serverLoad();
+        Log.d("onStart 업데이트 로딩", "다시 severLoad");
     }
 
     @Override
@@ -110,7 +114,7 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //클릭 이벤트 설정 -> 각 피드 상세보기
-                    Toast.makeText(MyPageActivity.this,"클릭한 포지션: " + position +"총 크기: " + feedImageUrlList.size() , Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MyPageActivity.this,"클릭한 포지션: " + position +"총 크기: " + feedImageUrlList.size() , Toast.LENGTH_SHORT).show();
                 //게시글 상세보기 액티비티 띄우기
                 TimeLine clickFeed = myFeed.get(position);
                 Intent intent= new Intent(MyPageActivity.this,FeedActivty.class);
@@ -121,6 +125,7 @@ public class MyPageActivity extends AppCompatActivity {
                 intent.putExtra("like", clickFeed.getLike());
                 intent.putExtra("comment", clickFeed.getPostComment());
                 intent.putExtra("comment2", clickFeed.getPostComment2());
+                intent.putExtra("postNum", clickFeed.getIndex());
 
                 startActivityForResult(intent, 300);
             }
@@ -139,6 +144,10 @@ public class MyPageActivity extends AppCompatActivity {
         txtId=findViewById(R.id.txtId);
         txtName=findViewById(R.id.txtName);
         txtIntro=findViewById(R.id.txtIntro);
+
+        imgProfile = findViewById(R.id.imgProfile);
+
+        Glide.with(context).load(myProfileUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(imgProfile);
 
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,31 +223,19 @@ public class MyPageActivity extends AppCompatActivity {
         //프로필사진, 아이디, 팔로워, 팔로잉, 개시글, 팔로우버튼(이 사람을 팔로우했는지 여부 판단)
         //이름, 소개글
         //피드 이미지리스트, 각 피드정보
-
-        profileUrl = "https://media.treepla.net:447/project/7ac115de-ec05-4ca3-8ea7-f3b70a22a1dc.png";
-        id="myj0113";
-        name="문영진";
-        intro="안녕";
-
+        //////////////////프로필 이미지 불러오기/////////////////////////
+       //SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        //profileUrl = pref.getString("myProfileImageUrl", "");
+        Glide.with(context).load(myProfileUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(imgMyProfile);
+        Log.d("onStart 로딩", "프로필사진 업데이트");
         /////////////////////////팔로워, 팔로잉 숫자 계산/////////////////////
-        followerCount=1;
-        followingCount=1;
+        followerCount=-1;
+        followingCount=-1;
         followerLoad();
         followingLoad();
         ////////////////////////본인 타임라인 불러오기////////////////////////
-        TimeLine temp = new TimeLine(profileUrl,"dudwls", "??????", "#스타벅스 #아메리카노", "줄띄위고 입력", new Date(), "15");
-        temp.addImageUrl(profileUrl);
-        myFeed.add(temp);
-        feedImageUrlList.add(temp.getImageUrl().get(0));
-        adapter.notifyDataSetChanged();//테스트용으로 계속추가해줌
-        /////////////////////////게시글 숫자 계산////////////////////////
-        postNum=feedImageUrlList.size();
-        txtPostNum.setText(String.valueOf(postNum));
-        //////////////////프로필 이미지 불러오기/////////////////////////
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        myProfileImageUrl = pref.getString("myProfileImageUrl", "");
-        Glide.with(context).load(myProfileImageUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(imgMyProfile);
 
+        profileLoad();
         /////////////////아이디, 이름, 소개 불러오기//////////////////////////
         userInfoLoad();
         txtId.setText(myId);
@@ -287,6 +284,13 @@ public class MyPageActivity extends AppCompatActivity {
             ImageView iv = (ImageView) convertView.findViewById(R.id.feedImage);
             //iv.setImageResource(img[position]);
             int gridviewH = gridview.getHeight() / 3; // 그리드뷰안에 이미지의 높이를 1/3로 설정
+
+            // 0.5초간 멈추게 하고싶다면
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                }
+            }, 500);  // 2000은 2초를 의미합니다.
 
             Glide.with(context).load(feedImageUrlList.get(position)).apply(new RequestOptions().override(gridviewH,gridviewH).centerCrop()).into(iv); //이미지 불러오기
 
@@ -352,6 +356,7 @@ public class MyPageActivity extends AppCompatActivity {
                             result = result.substring(index);
                             JSONObject jsonObject= new JSONObject(result);
                             resultcode=jsonObject.getInt("code");
+                            Log.d("팔로잉목록", result);
                             if(resultcode==100){
                                 JSONArray followerArray = (JSONArray)jsonObject.get("result");
                                 for(int i=0;i<followerArray.length();i++){
@@ -383,7 +388,7 @@ public class MyPageActivity extends AppCompatActivity {
     private void userInfoLoad() {
         new Thread() {
             public void run() {
-                httpConnection.userInfo("dudwls0113", new Callback(){
+                httpConnection.userInfo(myId, new Callback(){
                     @Override
                     public void onFailure(Call call, IOException e) {
                     }
@@ -415,6 +420,86 @@ public class MyPageActivity extends AppCompatActivity {
                             }
                         }
                         catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }.start();
+        Log.d("유저정보 업데이트 성공 ", "1");
+    }
+
+    private void profileLoad() {
+        new Thread() {
+            public void run() {
+                httpConnection.profilePage(jwt,myId, new Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+
+                        String result;
+                        int resultcode=0;
+                        JSONArray feedList;
+
+                        result=response.body().string();
+                        Log.d("프로필조회", result);
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(result);
+                            Log.d("프로필조회시도", json.toString());
+                            resultcode = json.getInt("code");
+
+                            feedList = json.getJSONArray("post");
+
+                            if (resultcode == 100) {
+                                Log.d("프로필조회 성공 ", feedList.toString());
+                                for(int i=0; i< feedList.length(); i++){
+                                    JSONObject feed =  feedList.getJSONObject(i);
+                                    String writer = feed.getString("writer");
+                                    String content = feed.getString("content");
+                                    String content2;
+                                    String stringDate = feed.getString("date");
+                                    String picture = feed.getString("picture");
+                                    int postNumber = feed.getInt("postNumber");
+                                    int like = feed.getInt("likes");
+
+                                    if(content.contains("\n")&&content.indexOf("\n")<content.length()){
+                                        int index = content.indexOf("\n");
+                                        content2 = content.substring(index+1);
+                                        content = content.substring(0, index);
+                                    }
+                                    else{
+                                        content=content;
+                                        content2="";
+                                    }
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
+                                    Date date = dateFormat.parse(stringDate);
+
+                                    TimeLine temp = new TimeLine(postNumber, myProfileUrl,writer, "??????", content, content2, date, String.valueOf(like));
+                                    temp.addImageUrl(picture);
+                                    if(i==0){
+                                        myFeed.clear();
+                                        feedImageUrlList.clear();
+                                        Log.d("업데이트전 삭제", "삭제완료");
+                                        //추가전에 리스트 비워주기
+                                    }
+                                    myFeed.add(temp);
+                                    feedImageUrlList.add(picture);
+                                }
+                                runOnUiThread(new Runnable() { public void run() {
+                                    // UI변경하는 쓰레드
+                                    adapter.notifyDataSetChanged();
+                                    postNum=feedImageUrlList.size();
+                                    txtPostNum.setText(String.valueOf(postNum));
+                                }
+                                });
+                            }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (ParseException e) {
                             e.printStackTrace();
                         }
                     }

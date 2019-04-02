@@ -31,14 +31,20 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.example.myinstagram.activitys.MainActivity.myId;
+import static com.example.myinstagram.activitys.MainActivity.myIntro;
+import static com.example.myinstagram.activitys.MainActivity.myName;
+import static com.example.myinstagram.activitys.MainActivity.myProfileUrl;
+
 public class ProfileEditActivity extends AppCompatActivity {
 
-    EditText editName, editId, editIntro, editEmail, editPhone, editSex;
-    TextView txtProfileChange, txtSave, txtCancle;
+    EditText editName,  editIntro, editEmail, editPhone, editSex;
+    TextView txtProfileChange, txtSave, txtCancle, txtId;
     ImageView imgMyProfile;
     private HttpConnection httpConnection;
     String jwt;
     String filePath;
+    String profileUrl;
 
     TedBottomPicker bottomSheetDialogFragment;
     ArrayList<Uri> imageUri=new ArrayList<>();
@@ -47,6 +53,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+    Boolean isImageChange =false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +62,9 @@ public class ProfileEditActivity extends AppCompatActivity {
         context=this;
 
         pref = getSharedPreferences("pref", MODE_PRIVATE);
-        editor = pref.edit();
+        //editor = pref.edit();
         jwt = pref.getString("jwt", "");
-        filePath = pref.getString("myProfileImageUrl", "");
+        //filePath = pref.getString("myProfileImageUrl", "");
 
         init();
     }
@@ -64,29 +72,42 @@ public class ProfileEditActivity extends AppCompatActivity {
     private void init(){
         httpConnection = new HttpConnection();
 
-        editName=findViewById(R.id.editName);
-        editId=findViewById(R.id.editId);
-        editIntro=findViewById(R.id.editIntro);
+        editName=findViewById(R.id.editName); //수정가능
+        editIntro=findViewById(R.id.editIntro); //수정가능
         editEmail=findViewById(R.id.editEmail);
         editSex=findViewById(R.id.editEmail);
         editPhone=findViewById(R.id.editEmail);
 
+        editName.setText(myName); //이름
+        editIntro.setText(myIntro); //소개
+
+        txtId=findViewById(R.id.txtId);
         txtProfileChange=findViewById(R.id.txtProfileChange);
         txtSave=findViewById(R.id.txtSave);
         txtCancle=findViewById(R.id.txtCancle);
 
-        imgMyProfile=findViewById(R.id.imgMyProfile);
-        Glide.with(context).load(filePath).apply(new RequestOptions().centerCrop().circleCrop()).into(imgMyProfile); //기존 프로필 이미지 불러오기
+        editName.setText(myName);
+        editIntro.setText(myIntro);
+        txtId.setText(myId);
+
+        imgMyProfile=findViewById(R.id.imgMyProfile); //수정가능
+        Glide.with(context).load(myProfileUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(imgMyProfile); //기존 프로필 이미지 불러오기
 
 
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //서버에 저장?//
-                Log.d("이미지경로", filePath);
-                imageUpload();
-                //다른 프로필정보도 수정하기
-                finish();
+                Log.d("이미지경로", myProfileUrl);
+                if(isImageChange) {
+                    imageUpload();
+                }
+                else {
+                    //다른 프로필정보도 수정하기
+                    profileEdit();
+                    myName = editName.getText().toString();
+                    myIntro = editIntro.getText().toString();
+                }
             }
         });
 
@@ -101,7 +122,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                                 imageUri = uriList;
                                 Glide.with(context).load(uriList.get(0)).apply(new RequestOptions().centerCrop().circleCrop()).into(imgMyProfile); //이미지 불러오기
                                 filePath = StaticMethod.getPath(context, imageUri.get(0));
-
+                                isImageChange=true;
                             }
                         })
                         .setPeekHeight(1600)
@@ -137,8 +158,10 @@ public class ProfileEditActivity extends AppCompatActivity {
                         String url="";
 
                         result=response.body().string();
-                        int index = result.indexOf("{");
-                        result = result.substring(index);
+                        if(result.contains("{")) {
+                            int index = result.indexOf("{");
+                            result = result.substring(index);
+                        }
                         JSONObject json = null;
                         try {
                             json = new JSONObject(result);
@@ -150,8 +173,42 @@ public class ProfileEditActivity extends AppCompatActivity {
                         }
                         if(resultcode==100){
                             Log.d("이미지업로드성공 ", url);
-                            editor.putString("myProfileImageUrl", url);
-                            editor.commit();
+                            myProfileUrl = url; //static
+                            profileEdit();
+                        }
+                    }
+                });
+            }
+        }.start();
+    }
+
+
+    private void profileEdit() {
+        new Thread() {
+            public void run() {
+                httpConnection.profileEdit(jwt, editName.getText().toString(), editIntro.getText().toString(), myProfileUrl, new Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result;
+                        int resultcode=0;
+
+                        result=response.body().string();
+                        int index = result.indexOf("{");
+                        result = result.substring(index);
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(result);
+                            Log.d("프로필수정", json.toString());
+                            resultcode=json.getInt("code");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if(resultcode==100){
+                            Log.d("프로필수정 성공 ", json.toString());
+                            finish();
                         }
                     }
                 });

@@ -1,6 +1,7 @@
 package com.example.myinstagram;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,7 +26,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.example.myinstagram.activitys.LoginActivity.jwt;
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.myinstagram.activitys.MainActivity.myId;
+
 
 public class FollowerFragment extends Fragment {
 
@@ -33,7 +36,11 @@ public class FollowerFragment extends Fragment {
     RecyclerView followerRecyclerView;
     LinearLayoutManager mLayoutManager;
     FollowerAdapter followerAdapter;
+
     ArrayList<Follower> followerList;
+    ArrayList<String> followingList;
+    ArrayList<String> followerProfileList;
+    ArrayList<String> followerIdList;
 
     Context context;
     private HttpConnection httpConnection;
@@ -43,6 +50,10 @@ public class FollowerFragment extends Fragment {
 
     int followerCount=1;
     int followingCount=1;
+
+    int modeVal;
+
+    String jwt;
     @Nullable
 
     @Override
@@ -51,20 +62,19 @@ public class FollowerFragment extends Fragment {
         context = getActivity();
         httpConnection = new HttpConnection();
 
+        SharedPreferences pref = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
+        jwt = pref.getString("jwt", "");
+
         followerList=new ArrayList<>();
-        String url = "https://scontent-hkg3-1.xx.fbcdn.net/v/t1.0-9/49609871_2368471986765652_3343732018184716288_n.jpg?_nc_cat=100&_nc_ht=scontent-hkg3-1.xx&oh=c2dce3e0e0466ecfc10d35b823407fc8&oe=5CF62F61";
-        followerList.add(new Follower(url,"gsssni", true));
+        followingList= new ArrayList<>();
+        followerProfileList=new ArrayList<>();
+        followerIdList = new ArrayList<>();
 
-        Bundle args = getArguments();
-        final int mode = args.getInt("mode");
+
         //서버에서 팔로워 요청해서 리스트에 담기
-
-        if(mode == FOLLOWER_MODE) {
-            followerLoad();
-        }
-        else if(mode == FOLLOING_MODE) {
-            followingLoad();
-        }
+        followingLoad();
+        followerLoad();
+        modeVal = FOLLOWER_MODE;
 
         followerRecyclerView = (RecyclerView)view.findViewById(R.id.followerList);
         mLayoutManager = new LinearLayoutManager(context);
@@ -99,10 +109,15 @@ public class FollowerFragment extends Fragment {
                                 for(int i=0;i<followerArray.length();i++){
                                     JSONObject tmp = (JSONObject)followerArray.get(i);//인덱스 번호로 접근해서 가져온다.
                                     String id = (String)tmp.get("my_id");
-                                    //임시 이미지 url
-                                    String url = "https://scontent-hkg3-1.xx.fbcdn.net/v/t1.0-9/49609871_2368471986765652_3343732018184716288_n.jpg?_nc_cat=100&_nc_ht=scontent-hkg3-1.xx&oh=c2dce3e0e0466ecfc10d35b823407fc8&oe=5CF62F61";
-                                    Follower follower = new Follower(url, id, true);
-                                    followerList.add(follower);
+                                    if(id.equals(myId)){
+                                        continue;
+                                    }
+                                    followerIdList.add(id);
+                                    //팔로워들 프로필 이미지 서버에서 로드
+                                    userInfoLoad(id, i);
+                                    //String url = "https://scontent-hkg3-1.xx.fbcdn.net/v/t1.0-9/49609871_2368471986765652_3343732018184716288_n.jpg?_nc_cat=100&_nc_ht=scontent-hkg3-1.xx&oh=c2dce3e0e0466ecfc10d35b823407fc8&oe=5CF62F61";
+                                    //Follower follower = new Follower(url, id, true);
+                                    //followerList.add(follower);
                                     followerCount++;
                                 }
                             }
@@ -132,17 +147,15 @@ public class FollowerFragment extends Fragment {
                             result = result.substring(index);
                             JSONObject jsonObject= new JSONObject(result);
                             resultcode=jsonObject.getInt("code");
-                            Log.d("팔로잉목록", result);
+                            Log.d("왜 안대는 팔로잉목록", result);
                             if(resultcode==100){
                                 JSONArray followerArray = (JSONArray)jsonObject.get("result");
                                 for(int i=0;i<followerArray.length();i++){
                                     JSONObject tmp = (JSONObject)followerArray.get(i);//인덱스 번호로 접근해서 가져온다.
-                                    String id = (String)tmp.get("my_id");
-                                    //임시 이미지 url
-                                    String url = "https://scontent-hkg3-1.xx.fbcdn.net/v/t1.0-9/49609871_2368471986765652_3343732018184716288_n.jpg?_nc_cat=100&_nc_ht=scontent-hkg3-1.xx&oh=c2dce3e0e0466ecfc10d35b823407fc8&oe=5CF62F61";
-                                    Follower follower = new Follower(url, id, true);
-                                    followerList.add(follower);
-                                    followingCount++;
+                                    String id = (String)tmp.get("following");
+                                    followingList.add(id);
+                                    Log.d("왜 안대는 팔로잉 아이디 목록에 추가: ", id);
+
                                 }
                             }
                         } catch (JSONException e) {
@@ -152,6 +165,84 @@ public class FollowerFragment extends Fragment {
                 });
             }
         }.start();
+    }
+
+
+    private void userInfoLoad(final String id, final int index) {
+        new Thread() {
+            public void run() {
+                httpConnection.userInfo(id, new Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result;
+                        int resultcode=0;
+                        JSONArray data;
+
+                        result=response.body().string();
+                        Log.d("유저정보조회", result);
+                        //int index = result.indexOf("{");
+                        //result = result.substring(index);
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(result);
+                            resultcode = json.getInt("code");
+
+                            data = json.getJSONArray("data");
+                            Log.d("유저정보data", data.toString());
+
+                            if (resultcode == 100) {
+
+                                Log.d("유저정보조회 성공 ", data.toString());
+                                String url = data.getJSONObject(0).getString("profileImage");
+                                String id = data.getJSONObject(0).getString("user_id");
+
+                                //followerProfileList.add(index,url);
+                                if(amIFollowYou(id)){
+                                    Follower following = new Follower(url, id, true);
+                                    followerList.add(following);
+                                }
+                                else{
+                                    Follower following = new Follower(url, id, false);
+                                    followerList.add(following);
+                                }
+                                followerCount++;
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 이 곳에 UI작업을 한다
+                                        followerAdapter.notifyDataSetChanged();
+                                    }
+                                });
+
+                            }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }.start();
+    }
+
+    private Boolean amIFollowYou(String id){
+        //String id = followerIdList.get(index);
+        boolean followYou;
+        Log.d("팔로잉 아이디 목록: ", followingList.toString());
+        if(followingList.contains(id)){
+            Log.d("팔로잉 하고있음: ", id);
+            return true;
+        }
+        else{
+            return false;
+            //Follower following = new Follower(url, id, followMe);
+            //followingrList.add(following);
+
+        }
     }
 
 }

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.squareup.picasso.Picasso;
@@ -38,17 +39,33 @@ public class ImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_image, container, false);
 
         ImageView imageView = view.findViewById(R.id.imageView);
-        if (getArguments() != null) {
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long btnPressTime = 0;
+                if (System.currentTimeMillis() > btnPressTime + 1000) {
+                    btnPressTime = System.currentTimeMillis();
+                    //  Toast.makeText(getApplicationContext(), "한번 더 터치하면 실행됩니다.",
+                    //         Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (System.currentTimeMillis() <= btnPressTime + 500) {
+                    Toast.makeText(getActivity(), "더블클릭", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //if (getArguments() != null) {
             Bundle args = getArguments();
             final String imageUrl = args.getString("imgUrl");
-            Glide.with(this).load(imageUrl).into(imageView);
+        Glide.with(this).load(imageUrl).apply(new RequestOptions().centerCrop()).into(imageView);
+        Log.d("picture에 들어가서 표시되는 이미지",  ""+ imageUrl);
 
-            //Uri uriData = Uri.parse(args.getString("imgUri"));
+        //Uri uriData = Uri.parse(args.getString("imgUri"));
             //Glide.with(this).load(uriData).into(imageView);
             //Log.d("유알엘", imageUrl);
             //Picasso.with(getActivity()).load(imageUrl).placeholder(R.drawable.image).into(imageView);
             //Glide.with(this).load(imageUrl).into(imageView);
-            }
+          //  }
         return view;
     }
 

@@ -88,7 +88,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2.3"
                 android:padding="7dp"
-                app:srcCompat="@mipmap/ic_launcher_round" />
+                tools:srcCompat="@mipmap/ic_launcher_round" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -100,7 +100,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.25"
+                    android:layout_weight="0.15"
                     android:orientation="horizontal">
 
                 </LinearLayout>
@@ -129,10 +129,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:layout_weight="1"
-                        android:text="159"
+                        android:text="비공개"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -141,17 +141,17 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:layout_weight="1"
-                        android:text="237"
+                        android:text="비공개"
                         android:textAlignment="center"
                         android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.4"
                     android:orientation="horizontal">
 
                     <TextView
@@ -197,7 +197,7 @@
                     android:layout_height="0dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="0.6"
+                    android:layout_weight="0.5"
                     android:background="@android:color/holo_blue_dark"
                     android:gravity="center"
                     android:text="팔로우"
@@ -216,7 +216,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
-                android:text="문영진"
+                tools:text="문영진"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -297,7 +297,7 @@
             app:srcCompat="@drawable/heart" />
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/imgProfile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

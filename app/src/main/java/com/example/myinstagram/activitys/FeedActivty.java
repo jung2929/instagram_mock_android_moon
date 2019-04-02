@@ -9,12 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.myinstagram.adapters.FeedAdapter;
 import com.example.myinstagram.R;
 import com.example.myinstagram.data.TimeLine;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import static com.example.myinstagram.activitys.MainActivity.myProfileUrl;
 
 public class FeedActivty extends AppCompatActivity {
 
@@ -23,6 +27,15 @@ public class FeedActivty extends AppCompatActivity {
 
     SharedPreferences pref;
     String myProfileImageUrl;
+
+    String profileUrl;
+    String name;
+    ArrayList<String> imageUrlList;
+    String location;
+    String like;
+    String comment;
+    String comment2;
+    int postNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,15 +46,16 @@ public class FeedActivty extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String profileUrl = intent.getExtras().getString("profile");
-        String name = intent.getExtras().getString("name");
-        ArrayList<String> imageUrlList = intent.getExtras().getStringArrayList("imageList");
-        String location = intent.getExtras().getString("location");
-        String like = intent.getExtras().getString("like");
-        String comment = intent.getExtras().getString("comment");
-        String comment2 = intent.getExtras().getString("comment2");
+        profileUrl =intent.getExtras().getString("profile");;
+        name = intent.getExtras().getString("name");
+        imageUrlList = intent.getExtras().getStringArrayList("imageList");
+        location = intent.getExtras().getString("location");
+        like = intent.getExtras().getString("like");
+        comment = intent.getExtras().getString("comment");
+        comment2 = intent.getExtras().getString("comment2");
+        postNum = intent.getExtras().getInt("postNum");
 
-        TimeLine timeLine  = new TimeLine(profileUrl, name, location, comment, comment2, new Date(), 15+"개");
+        TimeLine timeLine  = new TimeLine(postNum, profileUrl, name, location, comment, comment2, new Date(), like);
         for(int i=0; i<imageUrlList.size(); i++){
             timeLine.addImageUrl(imageUrlList.get(i));
         }
@@ -71,6 +85,8 @@ public class FeedActivty extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Glide.with(this).load(myProfileUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(imgProfile);
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +100,7 @@ public class FeedActivty extends AppCompatActivity {
         RecyclerView rv = (RecyclerView) findViewById(R.id.feed);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(mLayoutManager);
-        FeedAdapter feedAdapter = new FeedAdapter(getSupportFragmentManager(), feed, this, myProfileImageUrl);
+        FeedAdapter feedAdapter = new FeedAdapter(getSupportFragmentManager(), feed, this, profileUrl);
         rv.setAdapter(feedAdapter);
 
     }

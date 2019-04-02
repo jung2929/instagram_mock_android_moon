@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "189767006672",
+    "firebase_url": "https://unstagram-91402.firebaseio.com",
+    "project_id": "unstagram-91402",
+    "storage_bucket": "unstagram-91402.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189767006672:android:0529b9442db8c239",
+        "android_client_info": {
+          "package_name": "com.example.myinstagram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189767006672-vcp4nrephe349pl8sih8dteium6r799s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9mKEnRusoIYGBCJ5ebD2laFKoYJtj1Jg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

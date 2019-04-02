@@ -1,8 +1,10 @@
 package com.example.myinstagram.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myinstagram.HttpConnection;
 import com.example.myinstagram.data.Comment;
 import com.example.myinstagram.ImageFragment;
 import com.example.myinstagram.R;
@@ -25,8 +29,20 @@ import com.example.myinstagram.data.TimeLine;
 import com.example.myinstagram.activitys.CommentActivity;
 import com.pm10.library.CircleIndicator;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
+import static android.content.Context.ACTIVITY_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.myinstagram.activitys.MainActivity.myProfileUrl;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
@@ -64,7 +80,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
         viewHolder.txtName.setText(item.getPostName());
         //viewHolder.txtLocation.setText(item.getLocation());
-        viewHolder.txtLike.setText(item.getLike());
+        viewHolder.txtLike.setText(item.getLike()+"개");
         viewHolder.txtPostName.setText(item.getPostName());
         viewHolder.txtPostComment.setText(item.getPostComment());
         /////////댓글 있으면 피드에 댓글 2개까지 표시하기
@@ -82,7 +98,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         }
         //viewHolder.txtTimeCheck.setText(item.getTimeCheck());
 
-        Glide.with(context).load(myProfileImageUrl).apply(new RequestOptions().centerCrop().circleCrop()).into(viewHolder.imgPostProfile); //본인 프로필 이미지 불러오기
+        Glide.with(context).load(item.getProfielUrl()).apply(new RequestOptions().centerCrop().circleCrop()).into(viewHolder.imgPostProfile); //본인 프로필 이미지 불러오기
 
         imageList = item.getImageUrl();
 
@@ -101,7 +117,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             public void onClick(View v) {
                 Intent intent= new Intent(context,CommentActivity.class);
                 intent.putExtra("comment", item.getCommentList());
-                intent.putExtra("index", position);
+                intent.putExtra("index", item.getIndex());
                 context.startActivity(intent);
             }
         });
@@ -114,18 +130,18 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                 ListItems.add("공유");
                 ListItems.add("수정");
                 ListItems.add("삭제");
-                final CharSequence[] items =  ListItems.toArray(new String[ ListItems.size()]);
+                final CharSequence[] options =  ListItems.toArray(new String[ ListItems.size()]);
                 AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle);
                 //builder.setTitle("분류를 고르세요");
-                builder.setItems(items, new DialogInterface.OnClickListener() {
+                builder.setItems(options, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int pos) {
-                        String selectedText = items[pos].toString();
+                        String selectedText = options[pos].toString();
 
                         if(selectedText.equals("수정")){
 
                         }
                         else if(selectedText.equals("삭제")){
-
+                            feedDelete(item.getIndex(), position);
                         }
                     }
                 });
@@ -195,6 +211,47 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         public int getCount() {
             return imageList.size();
         }
+    }
+
+    private void feedDelete(final int postNum, final int listNum) {
+        new Thread() {
+            public void run() {
+                HttpConnection httpConnection = new HttpConnection();
+                SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+                String jwt = pref.getString("jwt", "");
+                httpConnection.feedDeleteApi(jwt, postNum, new Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result;
+                        int resultcode=0;
+                        String data="";
+
+                        result=response.body().string();
+                        Log.d("삭제", result);
+                        //int index = result.indexOf("{");
+                        //result = result.substring(index);
+                        JSONObject json = null;
+                        try {
+                            json = new JSONObject(result);
+                            Log.d("삭제 시도", json.toString());
+                            resultcode = json.getInt("code");
+
+                            if (resultcode == 100) {
+                                Log.d("삭제 성공 ", data);
+                                items.remove(listNum);
+                                ((Activity)context).finish();
+                            }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }.start();
     }
 
 }
